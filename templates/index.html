@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BugSmith - AI Bug Report Assistant</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>BugSmith</h1>
+        <p>AI-powered assistant to auto-generate structured bug reports.</p>
+
+        <form method="POST" action="/">
+            <label for="bug_description">Bug Description:</label>
+            <textarea name="bug_description" required placeholder="e.g. App crashes after Facebook login..."></textarea>
+
+            <label for="severity">Severity:</label>
+            <select name="severity">
+                <option>Low</option>
+                <option selected>Medium</option>
+                <option>High</option>
+                <option>Critical</option>
+            </select>
+
+            <label for="environment">Environment:</label>
+            <input type="text" name="environment" placeholder="e.g. Android 14, Chrome 123, Production" />
+
+            <button type="submit">Generate Report</button>
+        </form>
+
+        {% if result %}
+        <div class="result">
+            <h2>AI Generated Report</h2>
+            <pre>{{ result }}</pre>
+
+            <form method="POST" action="/export">
+                <input type="hidden" name="ai_report" value="{{ result }}">
+                <button type="submit">Download PDF</button>
+            </form>
+
+            <form method="POST" action="/create_issue">
+                <input type="hidden" name="ai_report" value="{{ result }}">
+                <input type="hidden" name="title" value="BugSmith AI Report">
+                <button type="submit">Create GitHub Issue</button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
